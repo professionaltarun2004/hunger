@@ -18,7 +18,7 @@ import '../screens/home_chef_exchange_screen.dart';
 final goRouterProvider = Provider<GoRouter>((ref) {
   return GoRouter(
     initialLocation: '/',
-    errorBuilder: (context, state) => Scaffold(
+    errorBuilder: (context, state) => const Scaffold(
       body: Center(
         child: Text(
           'Page not found',
@@ -71,7 +71,7 @@ final goRouterProvider = Provider<GoRouter>((ref) {
         builder: (context, state) {
           final id = int.tryParse(state.pathParameters['id'] ?? '');
           if (id == null) {
-            return Scaffold(
+            return const Scaffold(
               body: Center(
                 child: Text(
                   'Invalid restaurant ID',
@@ -135,7 +135,7 @@ class DebugScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return const Scaffold(
       backgroundColor: Colors.black,
       body: Center(
         child: Text(

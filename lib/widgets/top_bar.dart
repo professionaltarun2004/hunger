@@ -10,26 +10,26 @@ class TopBar extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       child: Column(
         children: [
           Row(
             children: [
-              Icon(Icons.location_on, color: Colors.white, size: 20),
-              SizedBox(width: 4),
+              const Icon(Icons.location_on, color: Colors.white, size: 20),
+              const SizedBox(width: 4),
               DropdownButton<String>(
                 value: 'Home',
                 dropdownColor: Colors.grey[800],
                 style: GoogleFonts.poppins(color: Colors.white, fontSize: 16),
-                icon: Icon(Icons.arrow_drop_down, color: Colors.white),
-                items: [
+                icon: const Icon(Icons.arrow_drop_down, color: Colors.white),
+                items: const [
                   DropdownMenuItem(value: 'Home', child: Text('Home')),
                   DropdownMenuItem(value: 'Work', child: Text('Work')),
                 ],
                 onChanged: (_) {},
               ),
-              Spacer(),
-              CircleAvatar(
+              const Spacer(),
+              const CircleAvatar(
                 radius: 16,
                 backgroundImage: NetworkImage(
                     'https://subfggmfnkhrmissnwfo.supabase.co/storage/v1/object/public/images//default_avatar.png'),
@@ -45,9 +45,9 @@ class TopBar extends ConsumerWidget {
                   overflow: TextOverflow.ellipsis,
                 ),
               ),
-              SizedBox(width: 8),
+              const SizedBox(width: 8),
               Container(
-                padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                 decoration: BoxDecoration(
                   color: Colors.grey[800],
                   borderRadius: BorderRadius.circular(12),
@@ -59,13 +59,13 @@ class TopBar extends ConsumerWidget {
               ),
             ],
           ),
-          SizedBox(height: 8),
+          const SizedBox(height: 8),
           TextField(
             decoration: InputDecoration(
               hintText: 'Search "dosa"',
               hintStyle: GoogleFonts.poppins(color: Colors.grey),
-              prefixIcon: Icon(Icons.search, color: Colors.white),
-              suffixIcon: Icon(Icons.mic, color: Colors.white),
+              prefixIcon: const Icon(Icons.search, color: Colors.white),
+              suffixIcon: const Icon(Icons.mic, color: Colors.white),
               filled: true,
               fillColor: Colors.grey[900],
               border: OutlineInputBorder(

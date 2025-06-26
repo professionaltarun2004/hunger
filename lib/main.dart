@@ -1,10 +1,14 @@
+// ignore_for_file: unnecessary_import, deprecated_member_use
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:flutter/services.dart';
 import 'dart:async';
 import 'routes/app_router.dart';
 import 'package:flutter/foundation.dart';
+import 'utils/responsive_utils.dart';
 
 // Environment configuration
 const supabaseUrl = String.fromEnvironment('SUPABASE_URL', defaultValue: 'https://subfggmfnkhrmissnwfo.supabase.co');
@@ -45,7 +49,7 @@ void main() async {
 
   // Run the app with error boundary
   runZonedGuarded(() {
-    runApp(ProviderScope(child: MyApp()));
+    runApp(const ProviderScope(child: MyApp()));
   }, (error, stack) {
     debugPrint('Uncaught error: $error');
     debugPrint('Stack trace: $stack');
@@ -58,71 +62,141 @@ class MyApp extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final router = ref.watch(goRouterProvider);
-    return MaterialApp.router(
-      debugShowCheckedModeBanner: false,
-      routerConfig: router,
-      theme: ThemeData(
-        primaryColor: Colors.redAccent,
-        fontFamily: 'Poppins',
-        scaffoldBackgroundColor: Colors.black,
-        cardTheme: CardTheme(
-          elevation: 4,
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-        ),
-        textTheme: const TextTheme(
-          bodyLarge: TextStyle(color: Colors.white),
-          bodyMedium: TextStyle(color: Colors.white),
-          bodySmall: TextStyle(color: Colors.white70),
-          titleLarge:
-              TextStyle(color: Colors.white, fontWeight: FontWeight.w600),
-        ),
-        appBarTheme: const AppBarTheme(
-          backgroundColor: Colors.black,
-          elevation: 4,
-          titleTextStyle: TextStyle(
+    
+    return ScreenUtilInit(
+      designSize: const Size(375, 812), // iPhone 12 Pro size as baseline
+      minTextAdapt: true,
+      splitScreenMode: true,
+      builder: (context, child) {
+        return MaterialApp.router(
+          debugShowCheckedModeBanner: false,
+          routerConfig: router,
+          theme: ThemeData(
+            primaryColor: Colors.redAccent,
             fontFamily: 'Poppins',
-            color: Colors.white,
-            fontSize: 20,
-            fontWeight: FontWeight.w600,
-          ),
-          iconTheme: IconThemeData(color: Colors.white),
-        ),
-        elevatedButtonTheme: ElevatedButtonThemeData(
-          style: ElevatedButton.styleFrom(
-            backgroundColor: const Color(0xFFE23744),
-            foregroundColor: Colors.white,
-            shape:
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-            textStyle: const TextStyle(
-              fontFamily: 'Poppins',
-              fontWeight: FontWeight.w600,
+            scaffoldBackgroundColor: Colors.black,
+            cardTheme: CardTheme(
+              elevation: 4,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12.r),
+              ),
+            ),
+            textTheme: TextTheme(
+              bodyLarge: TextStyle(
+                color: Colors.white,
+                fontSize: 16.sp,
+              ),
+              bodyMedium: TextStyle(
+                color: Colors.white,
+                fontSize: 14.sp,
+              ),
+              bodySmall: TextStyle(
+                color: Colors.white70,
+                fontSize: 12.sp,
+              ),
+              titleLarge: TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.w600,
+                fontSize: 20.sp,
+              ),
+            ),
+            appBarTheme: AppBarTheme(
+              backgroundColor: Colors.black,
+              elevation: 4,
+              titleTextStyle: TextStyle(
+                fontFamily: 'Poppins',
+                color: Colors.white,
+                fontSize: 20.sp,
+                fontWeight: FontWeight.w600,
+              ),
+              iconTheme: IconThemeData(
+                color: Colors.white,
+                size: 24.w,
+              ),
+            ),
+            elevatedButtonTheme: ElevatedButtonThemeData(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: const Color(0xFFE23744),
+                foregroundColor: Colors.white,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8.r),
+                ),
+                textStyle: TextStyle(
+                  fontFamily: 'Poppins',
+                  fontWeight: FontWeight.w600,
+                  fontSize: 16.sp,
+                ),
+                padding: EdgeInsets.symmetric(
+                  horizontal: 16.w,
+                  vertical: 12.h,
+                ),
+              ),
+            ),
+            outlinedButtonTheme: OutlinedButtonThemeData(
+              style: OutlinedButton.styleFrom(
+                foregroundColor: Colors.white,
+                side: BorderSide(
+                  color: Colors.grey[600]!,
+                  width: 1.w,
+                ),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8.r),
+                ),
+                textStyle: TextStyle(
+                  fontFamily: 'Poppins',
+                  fontWeight: FontWeight.w500,
+                  fontSize: 14.sp,
+                ),
+                padding: EdgeInsets.symmetric(
+                  horizontal: 16.w,
+                  vertical: 12.h,
+                ),
+              ),
+            ),
+            snackBarTheme: SnackBarThemeData(
+              backgroundColor: const Color(0xFFE23744),
+              contentTextStyle: TextStyle(
+                fontFamily: 'Poppins',
+                color: Colors.white,
+                fontWeight: FontWeight.w500,
+                fontSize: 14.sp,
+              ),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12.r),
+              ),
+              behavior: SnackBarBehavior.floating,
+              insetPadding: EdgeInsets.all(16.w),
+            ),
+            bottomNavigationBarTheme: BottomNavigationBarThemeData(
+              backgroundColor: Colors.black,
+              selectedItemColor: const Color(0xFFE23744),
+              unselectedItemColor: Colors.grey[600],
+              type: BottomNavigationBarType.fixed,
+              elevation: 8,
+              selectedLabelStyle: TextStyle(
+                fontFamily: 'Poppins',
+                fontWeight: FontWeight.w600,
+                fontSize: 12.sp,
+              ),
+              unselectedLabelStyle: TextStyle(
+                fontFamily: 'Poppins',
+                fontWeight: FontWeight.w400,
+                fontSize: 11.sp,
+              ),
+            ),
+            colorScheme: ColorScheme.dark(
+              primary: const Color(0xFFE23744),
+              secondary: Colors.white,
+              surface: Colors.grey[900]!,
+              background: Colors.black,
+              onPrimary: Colors.white,
+              onSecondary: Colors.black,
+              onSurface: Colors.white,
+              onBackground: Colors.white,
             ),
           ),
-        ),
-        snackBarTheme: SnackBarThemeData(
-          backgroundColor: const Color(0xFFE23744),
-          contentTextStyle: const TextStyle(
-            fontFamily: 'Poppins',
-            color: Colors.white,
-            fontWeight: FontWeight.w500,
-          ),
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-          behavior: SnackBarBehavior.floating,
-          insetPadding: const EdgeInsets.all(16),
-        ),
-        colorScheme: const ColorScheme.dark(
-          primary: Colors.redAccent,
-          secondary: Colors.white,
-          surface: Colors.grey,
-          background: Colors.black,
-          onPrimary: Colors.white,
-          onSecondary: Colors.black,
-          onSurface: Colors.white,
-          onBackground: Colors.white,
-        ).copyWith(surface: Colors.grey[900]),
-      ),
+        );
+      },
     );
   }
 }

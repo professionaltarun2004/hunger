@@ -40,48 +40,164 @@ class OrderNotifier extends StateNotifier<AsyncValue<void>> {
         throw Exception('User not logged in');
       }
 
-      final items = await _supabase
+      // Fetch original order items with proper error handling
+      final itemsResponse = await _supabase
           .from('order_items')
-          .select()
-          .eq('order_id', orderId) as List<dynamic>;
+          .select('menu_item_id, quantity')
+          .eq('order_id', orderId);
 
-      if (items.isEmpty) {
+      if (itemsResponse.isEmpty) {
         throw Exception('No items found for this order. Please add items to reorder.');
       }
 
-      final originalOrder = await _supabase
+      // Fetch original order details
+      final originalOrderResponse = await _supabase
           .from('orders')
-          .select()
+          .select('total_price, restaurant_id')
           .eq('id', orderId)
-          .single() as Map<String, dynamic>;
+          .single();
 
-      final totalPrice = originalOrder['total_price'] as num;
+      final totalPrice = (originalOrderResponse['total_price'] as num).toDouble();
+      final restaurantId = originalOrderResponse['restaurant_id'] as int?;
 
-      final newOrder = {
+      // Validate required fields
+      if (totalPrice <= 0) {
+        throw Exception('Invalid order total price');
+      }
+
+      // Create new order with all required fields
+      final newOrderData = {
         'user_id': user.id,
         'total_price': totalPrice,
-        'order_time': DateTime.now().toIso8601String(), // 03:10 PM IST, June 11, 2025
+        'order_time': DateTime.now().toIso8601String(),
+        'status': 'pending', // Add default status
       };
 
-      final newOrderData = await _supabase
+      // Add restaurant_id if it exists in the original order
+      if (restaurantId != null) {
+        newOrderData['restaurant_id'] = restaurantId;
+      }
+
+      print('Creating new order with data: $newOrderData'); // Debug logging
+
+      final newOrderResponse = await _supabase
           .from('orders')
-          .insert(newOrder)
-          .select()
-          .single() as Map<String, dynamic>;
+          .insert(newOrderData)
+          .select('id')
+          .single();
 
-      final newOrderId = newOrderData['id'] as int;
+      final newOrderId = newOrderResponse['id'] as int;
 
-      final newOrderItems = items.map((item) => {
-            'order_id': newOrderId,
-            'menu_item_id': item['menu_item_id'],
-            'quantity': item['quantity'],
-          }).toList();
+      // Validate and prepare order items
+      final newOrderItems = <Map<String, dynamic>>[];
+      for (final item in itemsResponse) {
+        final menuItemId = item['menu_item_id'];
+        final quantity = item['quantity'];
+
+        // Validate required fields
+        if (menuItemId == null || quantity == null || quantity <= 0) {
+          print('Skipping invalid item: $item');
+          continue;
+        }
+
+        newOrderItems.add({
+          'order_id': newOrderId,
+          'menu_item_id': menuItemId,
+          'quantity': quantity,
+        });
+      }
+
+      if (newOrderItems.isEmpty) {
+        throw Exception('No valid items to reorder');
+      }
+
+      print('Creating order items: $newOrderItems'); // Debug logging
 
       await _supabase.from('order_items').insert(newOrderItems);
 
       state = const AsyncValue.data(null);
     } catch (e, stackTrace) {
+      print('Error in reorder: $e');
+      print('Stack trace: $stackTrace');
       state = AsyncValue.error(e, stackTrace);
+    }
+  }
+
+  Future<Map<String, dynamic>> createOrder({
+    required String userId,
+    required double totalPrice,
+    int? restaurantId,
+    required List<Map<String, dynamic>> items,
+  }) async {
+    try {
+      // Validate input parameters
+      if (userId.isEmpty) {
+        throw Exception('User ID is required');
+      }
+      if (totalPrice <= 0) {
+        throw Exception('Total price must be greater than 0');
+      }
+      if (items.isEmpty) {
+        throw Exception('Order must contain at least one item');
+      }
+
+      // Validate each item
+      for (final item in items) {
+        if (item['menu_item_id'] == null || 
+            item['quantity'] == null || 
+            item['quantity'] <= 0) {
+          throw Exception('Invalid item data: $item');
+        }
+      }
+
+      // Create order with all required fields
+      final orderData = {
+        'user_id': userId,
+        'total_price': totalPrice,
+        'order_time': DateTime.now().toIso8601String(),
+        'status': 'pending',
+      };
+
+      // Add restaurant_id if provided
+      if (restaurantId != null) {
+        orderData['restaurant_id'] = restaurantId;
+      }
+
+      print('Creating order with data: $orderData'); // Debug logging
+
+      // Insert order and get the ID
+      final orderResponse = await _supabase
+          .from('orders')
+          .insert(orderData)
+          .select('id')
+          .single();
+
+      final orderId = orderResponse['id'] as int;
+
+      // Prepare order items with proper validation
+      final orderItems = items.map((item) => {
+        'order_id': orderId,
+        'menu_item_id': item['menu_item_id'],
+        'quantity': item['quantity'],
+      }).toList();
+
+      print('Creating order items: $orderItems'); // Debug logging
+
+      // Insert order items
+      await _supabase.from('order_items').insert(orderItems);
+
+      return {
+        'success': true,
+        'order_id': orderId,
+        'message': 'Order created successfully',
+      };
+    } catch (e) {
+      print('Error creating order: $e');
+      return {
+        'success': false,
+        'error': e.toString(),
+        'message': 'Failed to create order',
+      };
     }
   }
 }
