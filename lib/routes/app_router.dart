@@ -14,6 +14,10 @@ import '../screens/subscription_screen.dart';
 import '../screens/preferences_screen.dart';
 import '../screens/calorie_analysis_screen.dart';
 import '../screens/home_chef_exchange_screen.dart';
+import '../screens/search_screen.dart';
+import '../screens/mood_analyzer_screen.dart';
+import '../screens/notifications_screen.dart';
+import '../screens/home_food_delivery_screen.dart';
 
 final goRouterProvider = Provider<GoRouter>((ref) {
   return GoRouter(
@@ -102,6 +106,22 @@ final goRouterProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: '/home_chef_exchange',
         builder: (context, state) => const HomeChefExchangeScreen(),
+      ),
+      GoRoute(
+        path: '/search',
+        builder: (context, state) => const SearchScreen(),
+      ),
+      GoRoute(
+        path: '/mood_analyzer',
+        builder: (context, state) => const MoodAnalyzerScreen(),
+      ),
+      GoRoute(
+        path: '/notifications',
+        builder: (context, state) => const NotificationsScreen(),
+      ),
+      GoRoute(
+        path: '/home_food_delivery',
+        builder: (context, state) => const HomeFoodDeliveryScreen(),
       ),
     ],
     redirect: (context, state) async {

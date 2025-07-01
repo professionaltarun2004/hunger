@@ -161,20 +161,40 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
           ),
         ),
       ),
-      floatingActionButton: AnimatedScale(
-        scale: _showFloatingButton ? 1.0 : 0.0,
-        duration: const Duration(milliseconds: 200),
-        child: FloatingActionButton(
-          onPressed: () {
-            _scrollController.animateTo(
-              0,
-              duration: const Duration(milliseconds: 500),
-              curve: Curves.easeInOut,
-            );
-          },
-          backgroundColor: const Color(0xFFE23744),
-          child: const Icon(Icons.keyboard_arrow_up, color: Colors.white),
-        ),
+      floatingActionButton: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          FloatingActionButton(
+            heroTag: "home_food",
+            onPressed: () => context.push('/home_food_delivery'),
+            backgroundColor: Colors.green,
+            child: const Icon(Icons.home, color: Colors.white),
+          ),
+          SizedBox(height: ResponsiveUtils.height(8)),
+          FloatingActionButton(
+            heroTag: "mood",
+            onPressed: () => context.push('/mood_analyzer'),
+            backgroundColor: Colors.purple,
+            child: const Icon(Icons.psychology, color: Colors.white),
+          ),
+          SizedBox(height: ResponsiveUtils.height(8)),
+          AnimatedScale(
+            scale: _showFloatingButton ? 1.0 : 0.0,
+            duration: const Duration(milliseconds: 200),
+            child: FloatingActionButton(
+              heroTag: "scroll",
+              onPressed: () {
+                _scrollController.animateTo(
+                  0,
+                  duration: const Duration(milliseconds: 500),
+                  curve: Curves.easeInOut,
+                );
+              },
+              backgroundColor: const Color(0xFFE23744),
+              child: const Icon(Icons.keyboard_arrow_up, color: Colors.white),
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -433,150 +453,172 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
   }
 
   Widget _buildDishCard(dynamic dish, {bool isQuickBite = false}) {
-    return Container(
-      width: ResponsiveUtils.width(160),
-      margin: ResponsiveUtils.padding(right: 12),
-      decoration: BoxDecoration(
-        color: Colors.grey[900],
-        borderRadius: BorderRadius.circular(12.r),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.3),
-            blurRadius: 8,
-            offset: const Offset(0, 4),
-          ),
-        ],
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Expanded(
-            flex: 3,
-            child: Stack(
-              children: [
-                ClipRRect(
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(12.r),
-                    topRight: Radius.circular(12.r),
-                  ),
-                  child: CachedNetworkImage(
-                    imageUrl: dish.imageUrl,
-                    width: double.infinity,
-                    height: double.infinity,
-                    fit: BoxFit.cover,
-                    placeholder: (context, url) => Shimmer.fromColors(
-                      baseColor: Colors.grey[800]!,
-                      highlightColor: Colors.grey[600]!,
-                      child: Container(color: Colors.grey[800]),
-                    ),
-                  ),
-                ),
-                if (dish.isVegetarian)
-                  Positioned(
-                    top: ResponsiveUtils.height(8),
-                    left: ResponsiveUtils.width(8),
-                    child: Container(
-                      padding: ResponsiveUtils.padding(all: 4),
-                      decoration: BoxDecoration(
-                        color: Colors.green,
-                        borderRadius: BorderRadius.circular(4.r),
-                      ),
-                      child: Icon(
-                        Icons.circle,
-                        color: Colors.white,
-                        size: ResponsiveUtils.width(8),
-                      ),
-                    ),
-                  ),
-                if (isQuickBite)
-                  Positioned(
-                    top: ResponsiveUtils.height(8),
-                    right: ResponsiveUtils.width(8),
-                    child: Container(
-                      padding: ResponsiveUtils.padding(
-                        horizontal: 6,
-                        vertical: 2,
-                      ),
-                      decoration: BoxDecoration(
-                        color: Colors.orange,
-                        borderRadius: BorderRadius.circular(8.r),
-                      ),
-                      child: Text(
-                        '15 min',
-                        style: GoogleFonts.poppins(
-                          color: Colors.white,
-                          fontSize: ResponsiveUtils.fontSize(10),
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
-                  ),
-              ],
+    return GestureDetector(
+      onTap: () {
+        // Navigate to restaurant detail page to order this dish
+        final restaurants = ref.read(restaurantProvider).value ?? [];
+        final restaurant = restaurants.isNotEmpty
+            ? restaurants.firstWhere(
+                (r) => r.name == dish.restaurantName,
+                orElse: () => restaurants.first,
+              )
+            : null;
+        if (restaurant != null) {
+          context.push('/restaurant/${restaurant.id}');
+        } else {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('Restaurant not found for ${dish.name}'),
+              backgroundColor: Colors.red,
             ),
-          ),
-          Expanded(
-            flex: 2,
-            child: Padding(
-              padding: ResponsiveUtils.padding(all: 8),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+          );
+        }
+      },
+      child: Container(
+        width: ResponsiveUtils.width(160),
+        margin: ResponsiveUtils.padding(right: 12),
+        decoration: BoxDecoration(
+          color: Colors.grey[900],
+          borderRadius: BorderRadius.circular(12.r),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withValues(alpha: 0.3),
+              blurRadius: 8,
+              offset: const Offset(0, 4),
+            ),
+          ],
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Expanded(
+              flex: 3,
+              child: Stack(
                 children: [
-                  Text(
-                    dish.name,
-                    style: GoogleFonts.poppins(
-                      color: Colors.white,
-                      fontSize: ResponsiveUtils.fontSize(12),
-                      fontWeight: FontWeight.w600,
+                  ClipRRect(
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(12.r),
+                      topRight: Radius.circular(12.r),
                     ),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                  SizedBox(height: ResponsiveUtils.height(2)),
-                  Text(
-                    dish.restaurantName,
-                    style: GoogleFonts.poppins(
-                      color: Colors.grey[400],
-                      fontSize: ResponsiveUtils.fontSize(10),
+                    child: CachedNetworkImage(
+                      imageUrl: dish.imageUrl,
+                      width: double.infinity,
+                      height: double.infinity,
+                      fit: BoxFit.cover,
+                      placeholder: (context, url) => Shimmer.fromColors(
+                        baseColor: Colors.grey[800]!,
+                        highlightColor: Colors.grey[600]!,
+                        child: Container(color: Colors.grey[800]),
+                      ),
                     ),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
                   ),
-                  const Spacer(),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        '₹${dish.price.toInt()}',
-                        style: GoogleFonts.poppins(
-                          color: const Color(0xFFE23744),
-                          fontSize: ResponsiveUtils.fontSize(14),
-                          fontWeight: FontWeight.bold,
+                  if (dish.isVegetarian)
+                    Positioned(
+                      top: ResponsiveUtils.height(8),
+                      left: ResponsiveUtils.width(8),
+                      child: Container(
+                        padding: ResponsiveUtils.padding(all: 4),
+                        decoration: BoxDecoration(
+                          color: Colors.green,
+                          borderRadius: BorderRadius.circular(4.r),
+                        ),
+                        child: Icon(
+                          Icons.circle,
+                          color: Colors.white,
+                          size: ResponsiveUtils.width(8),
                         ),
                       ),
-                      Row(
-                        children: [
-                          Icon(
-                            Icons.star,
-                            color: Colors.amber,
-                            size: ResponsiveUtils.width(12),
+                    ),
+                  if (isQuickBite)
+                    Positioned(
+                      top: ResponsiveUtils.height(8),
+                      right: ResponsiveUtils.width(8),
+                      child: Container(
+                        padding: ResponsiveUtils.padding(
+                          horizontal: 6,
+                          vertical: 2,
+                        ),
+                        decoration: BoxDecoration(
+                          color: Colors.orange,
+                          borderRadius: BorderRadius.circular(8.r),
+                        ),
+                        child: Text(
+                          '15 min',
+                          style: GoogleFonts.poppins(
+                            color: Colors.white,
+                            fontSize: ResponsiveUtils.fontSize(10),
+                            fontWeight: FontWeight.bold,
                           ),
-                          SizedBox(width: ResponsiveUtils.width(2)),
-                          Text(
-                            dish.rating.toString(),
-                            style: GoogleFonts.poppins(
-                              color: Colors.grey[300],
-                              fontSize: ResponsiveUtils.fontSize(10),
-                            ),
-                          ),
-                        ],
+                        ),
                       ),
-                    ],
-                  ),
+                    ),
                 ],
               ),
             ),
-          ),
-        ],
+            Expanded(
+              flex: 2,
+              child: Padding(
+                padding: ResponsiveUtils.padding(all: 8),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      dish.name,
+                      style: GoogleFonts.poppins(
+                        color: Colors.white,
+                        fontSize: ResponsiveUtils.fontSize(12),
+                        fontWeight: FontWeight.w600,
+                      ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    SizedBox(height: ResponsiveUtils.height(2)),
+                    Text(
+                      dish.restaurantName,
+                      style: GoogleFonts.poppins(
+                        color: Colors.grey[400],
+                        fontSize: ResponsiveUtils.fontSize(10),
+                      ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    const Spacer(),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          '₹${dish.price.toInt()}',
+                          style: GoogleFonts.poppins(
+                            color: const Color(0xFFE23744),
+                            fontSize: ResponsiveUtils.fontSize(14),
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        Row(
+                          children: [
+                            Icon(
+                              Icons.star,
+                              color: Colors.amber,
+                              size: ResponsiveUtils.width(12),
+                            ),
+                            SizedBox(width: ResponsiveUtils.width(2)),
+                            Text(
+                              dish.rating.toString(),
+                              style: GoogleFonts.poppins(
+                                color: Colors.grey[300],
+                                fontSize: ResponsiveUtils.fontSize(10),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

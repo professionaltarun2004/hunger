@@ -4,7 +4,7 @@ class User {
   final String email;
   final String? address;
   final bool isVegOnly;
-  final DateTime createdAt;
+  final DateTime? createdAt;
 
   User({
     required this.id,
@@ -12,7 +12,7 @@ class User {
     required this.email,
     this.address,
     required this.isVegOnly,
-    required this.createdAt,
+    this.createdAt,
   });
 
   factory User.fromJson(Map<String, dynamic> json) {
@@ -22,18 +22,24 @@ class User {
       email: json['email'] as String,
       address: json['address'] as String?,
       isVegOnly: json['is_veg_only'] as bool? ?? false,
-      createdAt: DateTime.parse(json['created_at'] as String),
+      createdAt: json['created_at'] != null ? DateTime.parse(json['created_at'] as String) : null,
     );
   }
 
   Map<String, dynamic> toJson() {
-    return {
+    final Map<String, dynamic> data = {
       'id': id,
       'name': name,
       'email': email,
       'address': address,
       'is_veg_only': isVegOnly,
-      'created_at': createdAt.toIso8601String(),
     };
+    
+    // Only include created_at if it exists
+    if (createdAt != null) {
+      data['created_at'] = createdAt!.toIso8601String();
+    }
+    
+    return data;
   }
 } 

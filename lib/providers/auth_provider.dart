@@ -54,7 +54,6 @@ class AuthNotifier extends StateNotifier<AuthState> {
           'email': user.email,
           'name': user.userMetadata?['full_name'] ?? user.email?.split('@').first ?? 'User',
           'is_veg_only': false, // Default value
-          'created_at': DateTime.now().toIso8601String(),
         });
         debugPrint('User profile created successfully for ${user.id}');
       } else {

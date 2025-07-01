@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_toggle_tab/flutter_toggle_tab.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:go_router/go_router.dart';
+import '../services/notification_service.dart';
 
 class TopBar extends ConsumerWidget {
   const TopBar({super.key});
@@ -29,6 +31,55 @@ class TopBar extends ConsumerWidget {
                 onChanged: (_) {},
               ),
               const Spacer(),
+              // Notification icon with badge
+              Stack(
+                children: [
+                  IconButton(
+                    onPressed: () {
+                      context.push('/notifications');
+                    },
+                    icon: const Icon(
+                      Icons.notifications_outlined,
+                      color: Colors.white,
+                      size: 24,
+                    ),
+                  ),
+                  // Notification badge
+                  Consumer(
+                    builder: (context, ref, child) {
+                      final unreadCount = ref.watch(unreadNotificationCountProvider);
+                      if (unreadCount > 0) {
+                        return Positioned(
+                          right: 8,
+                          top: 8,
+                          child: Container(
+                            padding: const EdgeInsets.all(2),
+                            decoration: BoxDecoration(
+                              color: Colors.red,
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            constraints: const BoxConstraints(
+                              minWidth: 16,
+                              minHeight: 16,
+                            ),
+                            child: Text(
+                              unreadCount.toString(),
+                              style: GoogleFonts.poppins(
+                                color: Colors.white,
+                                fontSize: 10,
+                                fontWeight: FontWeight.bold,
+                              ),
+                              textAlign: TextAlign.center,
+                            ),
+                          ),
+                        );
+                      }
+                      return const SizedBox.shrink();
+                    },
+                  ),
+                ],
+              ),
+              const SizedBox(width: 8),
               const CircleAvatar(
                 radius: 16,
                 backgroundImage: NetworkImage(
@@ -60,20 +111,29 @@ class TopBar extends ConsumerWidget {
             ],
           ),
           const SizedBox(height: 8),
-          TextField(
-            decoration: InputDecoration(
-              hintText: 'Search "dosa"',
-              hintStyle: GoogleFonts.poppins(color: Colors.grey),
-              prefixIcon: const Icon(Icons.search, color: Colors.white),
-              suffixIcon: const Icon(Icons.mic, color: Colors.white),
-              filled: true,
-              fillColor: Colors.grey[900],
-              border: OutlineInputBorder(
+          GestureDetector(
+            onTap: () {
+              context.push('/search');
+            },
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+              decoration: BoxDecoration(
+                color: Colors.grey[900],
                 borderRadius: BorderRadius.circular(12),
-                borderSide: BorderSide.none,
+              ),
+              child: Row(
+                children: [
+                  const Icon(Icons.search, color: Colors.white),
+                  const SizedBox(width: 12),
+                  Text(
+                    'Search "dosa"',
+                    style: GoogleFonts.poppins(color: Colors.grey),
+                  ),
+                  const Spacer(),
+                  const Icon(Icons.mic, color: Colors.white),
+                ],
               ),
             ),
-            style: GoogleFonts.poppins(color: Colors.white),
           ),
         ],
       ),

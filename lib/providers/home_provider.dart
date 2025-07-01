@@ -27,52 +27,52 @@ final foodCategoriesProvider = Provider<List<FoodCategory>>((ref) {
     FoodCategory(
       id: 1,
       name: 'Pizza',
-      imageUrl: 'https://images.unsplash.com/photo-1565299624946-b28f40a0ca4b?w=400',
+      imageUrl: 'https://images.pexels.com/photos/315755/pexels-photo-315755.jpeg?auto=compress&cs=tinysrgb&w=400',
       description: 'Delicious pizzas from top restaurants',
       isPopular: true,
     ),
     FoodCategory(
       id: 2,
       name: 'Burger',
-      imageUrl: 'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=400',
+      imageUrl: 'https://images.pexels.com/photos/1639557/pexels-photo-1639557.jpeg?auto=compress&cs=tinysrgb&w=400',
       description: 'Juicy burgers and sandwiches',
       isPopular: true,
     ),
     FoodCategory(
       id: 3,
       name: 'Biryani',
-      imageUrl: 'https://images.unsplash.com/photo-1563379091339-03246963d51a?w=400',
+      imageUrl: 'https://images.pexels.com/photos/11220209/pexels-photo-11220209.jpeg?auto=compress&cs=tinysrgb&w=400',
       description: 'Aromatic biryani and rice dishes',
       isPopular: true,
     ),
     FoodCategory(
       id: 4,
       name: 'Chinese',
-      imageUrl: 'https://images.unsplash.com/photo-1552611052-33e04de081de?w=400',
+      imageUrl: 'https://images.pexels.com/photos/2347311/pexels-photo-2347311.jpeg?auto=compress&cs=tinysrgb&w=400',
       description: 'Authentic Chinese cuisine',
     ),
     FoodCategory(
       id: 5,
       name: 'Desserts',
-      imageUrl: 'https://images.unsplash.com/photo-1551024506-0bccd828d307?w=400',
+      imageUrl: 'https://images.pexels.com/photos/291528/pexels-photo-291528.jpeg?auto=compress&cs=tinysrgb&w=400',
       description: 'Sweet treats and desserts',
     ),
     FoodCategory(
       id: 6,
       name: 'South Indian',
-      imageUrl: 'https://images.unsplash.com/photo-1567188040759-fb8a883dc6d8?w=400',
+      imageUrl: 'https://images.pexels.com/photos/5560763/pexels-photo-5560763.jpeg?auto=compress&cs=tinysrgb&w=400',
       description: 'Traditional South Indian dishes',
     ),
     FoodCategory(
       id: 7,
       name: 'North Indian',
-      imageUrl: 'https://images.unsplash.com/photo-1565557623262-b51c2513a641?w=400',
+      imageUrl: 'https://images.pexels.com/photos/2474661/pexels-photo-2474661.jpeg?auto=compress&cs=tinysrgb&w=400',
       description: 'Rich North Indian curries',
     ),
     FoodCategory(
       id: 8,
       name: 'Beverages',
-      imageUrl: 'https://images.unsplash.com/photo-1544145945-f90425340c7e?w=400',
+      imageUrl: 'https://images.pexels.com/photos/1346155/pexels-photo-1346155.jpeg?auto=compress&cs=tinysrgb&w=400',
       description: 'Refreshing drinks and beverages',
     ),
   ];
@@ -91,7 +91,7 @@ final popularDishesProvider = FutureProvider<List<MenuItem>>((ref) async {
     MenuItem(
       id: 1,
       name: 'Margherita Pizza',
-      imageUrl: 'https://images.unsplash.com/photo-1604382354936-07c5d9983bd3?w=400',
+      imageUrl: 'https://images.pexels.com/photos/315755/pexels-photo-315755.jpeg?auto=compress&cs=tinysrgb&w=400',
       price: 299.0,
       calories: 800,
       restaurantId: 1,
@@ -105,7 +105,7 @@ final popularDishesProvider = FutureProvider<List<MenuItem>>((ref) async {
     MenuItem(
       id: 2,
       name: 'Chicken Biryani',
-      imageUrl: 'https://images.unsplash.com/photo-1563379091339-03246963d51a?w=400',
+      imageUrl: 'https://images.pexels.com/photos/11220209/pexels-photo-11220209.jpeg?auto=compress&cs=tinysrgb&w=400',
       price: 350.0,
       calories: 650,
       restaurantId: 2,
@@ -118,7 +118,7 @@ final popularDishesProvider = FutureProvider<List<MenuItem>>((ref) async {
     MenuItem(
       id: 3,
       name: 'Chicken Burger',
-      imageUrl: 'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=400',
+      imageUrl: 'https://images.pexels.com/photos/1639557/pexels-photo-1639557.jpeg?auto=compress&cs=tinysrgb&w=400',
       price: 249.0,
       calories: 550,
       restaurantId: 3,
@@ -131,7 +131,7 @@ final popularDishesProvider = FutureProvider<List<MenuItem>>((ref) async {
     MenuItem(
       id: 4,
       name: 'Masala Dosa',
-      imageUrl: 'https://images.unsplash.com/photo-1567188040759-fb8a883dc6d8?w=400',
+      imageUrl: 'https://images.pexels.com/photos/5560763/pexels-photo-5560763.jpeg?auto=compress&cs=tinysrgb&w=400',
       price: 120.0,
       calories: 400,
       restaurantId: 4,
@@ -145,7 +145,7 @@ final popularDishesProvider = FutureProvider<List<MenuItem>>((ref) async {
     MenuItem(
       id: 5,
       name: 'Chocolate Brownie',
-      imageUrl: 'https://images.unsplash.com/photo-1606313564200-e75d5e30476c?w=400',
+      imageUrl: 'https://images.pexels.com/photos/291528/pexels-photo-291528.jpeg?auto=compress&cs=tinysrgb&w=400',
       price: 150.0,
       calories: 320,
       restaurantId: 5,
@@ -185,7 +185,7 @@ final quickBitesProvider = FutureProvider<List<MenuItem>>((ref) async {
     MenuItem(
       id: 6,
       name: 'Veg Sandwich',
-      imageUrl: 'https://images.unsplash.com/photo-1539252554453-80ab65ce3586?w=400',
+      imageUrl: 'https://images.pexels.com/photos/1095550/pexels-photo-1095550.jpeg?auto=compress&cs=tinysrgb&w=400',
       price: 80.0,
       calories: 250,
       restaurantId: 6,
@@ -198,7 +198,7 @@ final quickBitesProvider = FutureProvider<List<MenuItem>>((ref) async {
     MenuItem(
       id: 7,
       name: 'Samosa (2 pcs)',
-      imageUrl: 'https://images.unsplash.com/photo-1601050690597-df0568f70950?w=400',
+      imageUrl: 'https://images.pexels.com/photos/14737/pexels-photo.jpg?auto=compress&cs=tinysrgb&w=400',
       price: 40.0,
       calories: 180,
       restaurantId: 7,
@@ -211,7 +211,7 @@ final quickBitesProvider = FutureProvider<List<MenuItem>>((ref) async {
     MenuItem(
       id: 8,
       name: 'Fresh Lime Soda',
-      imageUrl: 'https://images.unsplash.com/photo-1544145945-f90425340c7e?w=400',
+      imageUrl: 'https://images.pexels.com/photos/1346155/pexels-photo-1346155.jpeg?auto=compress&cs=tinysrgb&w=400',
       price: 60.0,
       calories: 50,
       restaurantId: 8,
@@ -248,21 +248,21 @@ final offersProvider = Provider<List<Map<String, dynamic>>>((ref) {
       'subtitle': 'On orders above ₹299',
       'code': 'SAVE50',
       'color': 0xFFE23744,
-      'imageUrl': 'https://images.unsplash.com/photo-1565299624946-b28f40a0ca4b?w=400',
+      'imageUrl': 'https://images.pexels.com/photos/315755/pexels-photo-315755.jpeg?auto=compress&cs=tinysrgb&w=400',
     },
     {
       'title': 'Free Delivery',
       'subtitle': 'On your first order',
       'code': 'FREEDEL',
       'color': 0xFF4CAF50,
-      'imageUrl': 'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=400',
+      'imageUrl': 'https://images.pexels.com/photos/1639557/pexels-photo-1639557.jpeg?auto=compress&cs=tinysrgb&w=400',
     },
     {
       'title': '₹100 OFF',
       'subtitle': 'On orders above ₹500',
       'code': 'HUNDRED',
       'color': 0xFF2196F3,
-      'imageUrl': 'https://images.unsplash.com/photo-1563379091339-03246963d51a?w=400',
+      'imageUrl': 'https://images.pexels.com/photos/11220209/pexels-photo-11220209.jpeg?auto=compress&cs=tinysrgb&w=400',
     },
   ];
 }); 
